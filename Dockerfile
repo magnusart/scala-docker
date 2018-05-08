@@ -36,17 +36,24 @@ ONBUILD ARG full_assembly_artifact_name=${artifact_name}-assembly-${version}
 
 ONBUILD RUN echo "version := \"${version}\"" > ./version.sbt
 
-ONBUILD COPY /src /src
+# Package dependencies
+ONBUILD COPY /src/main /src/main
 
-# Package the application
 ONBUILD RUN sbt assemblyPackageScala assemblyPackageDependency
-ONBUILD RUN sbt assembly
 
-ONBUILD RUN printf '#!/bin/bash\njava ' > launch.sh
+# Include test code
+ONBUILD COPY /src/test /src/test
+
+# Test and package application code
+ONBUILD RUN sbt test
+ONBUILD RUN sbt assembly
 
 # Add runtime arguments
 ONBUILD COPY /java.args /java.args
-ONBUILD RUN echo `cat java.args` | xargs -n1 printf "%s " $1 >> launch.sh
-ONBUILD RUN printf -- "-cp \"/deps/*\" %s\n" $main_launch_file >> launch.sh
-ONBUILD RUN chmod +x ./launch.sh
+
+# Setup launch script
+ONBUILD RUN printf '#!/bin/bash\njava ' > launch.sh && \ 
+            echo `cat java.args` | xargs -n1 printf "%s " $1 >> launch.sh && \
+            printf -- "-cp \"/deps/*\" %s\n" $main_launch_file >> launch.sh && \
+            chmod +x ./launch.sh
 
