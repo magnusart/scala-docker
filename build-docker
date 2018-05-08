@@ -1,0 +1,7 @@
+#!/bin/bash
+
+version=`git describe --always --dirty --abbrev=10 --tags`
+
+echo "Building scala-docker:"$version"."
+
+docker build $@ --rm -t magnusart/scala-docker:$version .

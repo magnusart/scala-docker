@@ -1,0 +1,9 @@
+version: 2
+jobs:
+ build:
+   machine: true
+   steps:
+     - checkout
+     - run: ./build-docker
+     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+     - run: docker push magnusart/scala-docker:`git describe --always --dirty --abbrev=10 --tags`
