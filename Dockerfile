@@ -36,15 +36,15 @@ ONBUILD ARG full_assembly_artifact_name=${artifact_name}-assembly-${version}
 
 ONBUILD RUN echo "version := \"${version}\"" > ./version.sbt
 
+# Package Scala code
+ONBUILD RUN sbt assemblyPackageScala
+
 # Package dependencies
 ONBUILD COPY /src/main /src/main
-
-ONBUILD RUN sbt assemblyPackageScala assemblyPackageDependency
-
-# Include test code
-ONBUILD COPY /src/test /src/test
+ONBUILD RUN sbt assemblyPackageDependency
 
 # Test and package application code
+ONBUILD COPY /src/test /src/test
 ONBUILD RUN sbt test
 ONBUILD RUN sbt assembly
 
