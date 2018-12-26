@@ -1,1 +1,0 @@
--cp "${ARTIFACT_NAME}-deps.jar:${ARTIFACT_NAME}.jar" ${MAIN_LAUNCH_FILE}
