@@ -33,8 +33,7 @@ ONBUILD ARG full_assembly_artifact_name=${artifact_name}-assembly-${version}
 
 #Change directory
 ONBUILD WORKDIR /app
-ONBUILD RUN tree
-
+ONBUILD RUN tree -a
 # Package Scala code
 ONBUILD RUN sbt assemblyPackageScala
 
@@ -51,4 +50,4 @@ ONBUILD RUN printf '#!/bin/bash\njava ' > launch.sh && \
   printf -- "-cp \"/deps/*\" %s\n" $main_launch_file >> launch.sh && \
   chmod +x ./launch.sh
 
-ONBUILD RUN tree
+ONBUILD RUN tree -a
