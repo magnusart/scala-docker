@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version=`git describe --always --dirty --abbrev=10 --tags`
+version=`git describe --always --dirty --abbrev=7 --tags`
 
 echo "Building scala-docker:"$version"."
 
